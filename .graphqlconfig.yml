@@ -1,5 +1,5 @@
 projects:
-  amplifymultienvexample:
+  emotions:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.js
@@ -10,7 +10,3 @@ projects:
         codeGenTarget: javascript
         generatedFileName: ''
         docsFilePath: src/graphql
-        graphQLApiId: jr2wfznltjdxvedo2bqs7g34se
-      endpoints:
-        prod: >-
-          https://ano2yeqyerbphdvzvwjtlep2da.appsync-api.us-east-1.amazonaws.com/graphql

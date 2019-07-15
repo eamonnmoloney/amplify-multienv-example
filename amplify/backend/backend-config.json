@@ -6,7 +6,7 @@
 		}
 	},
 	"api": {
-		"amplifymultienvexample": {
+		"emotions": {
 			"service": "AppSync",
 			"providerPlugin": "awscloudformation",
 			"output": {

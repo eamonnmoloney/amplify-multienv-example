@@ -1,0 +1,10 @@
+{
+    "AppSyncApiName": "emotions",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authcognito20860e82",
+            "Outputs.UserPoolId"
+        ]
+    }
+}

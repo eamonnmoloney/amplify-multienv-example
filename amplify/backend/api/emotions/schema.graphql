@@ -1,0 +1,26 @@
+type Blog @model {
+  id: ID!
+  name: String!
+  posts: [Post] @connection(name: "BlogPosts")
+}
+
+type Post @model {
+  id: ID!
+  title: String!
+  blog: Blog @connection(name: "BlogPosts")
+  comments: [Comment] @connection(name: "PostComments"),
+  intensity: Int,
+}
+
+type Comment @model {
+  id: ID!
+  content: String
+  post: Post @connection(name: "PostComments")
+}
+
+type Emotion @model {
+  id: ID!
+  name: String!,
+  intensity: Int,
+  lastUpdated: String,
+}
