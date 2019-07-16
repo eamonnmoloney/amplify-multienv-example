@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import FullApp from './FullApp';
 import App from './App';
 import EmotionsPage from './Emotions';
 import Card from './Card';
@@ -10,28 +11,7 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
 ReactDOM.render((
-    <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/emotions/">Emotions</Link>
-            </li>
-            <li>
-              <Link to="/cards/">Cards</Link>
-            </li>
-          </ul>
-        </nav>
-
-        <Route path="/" exact component={App} />
-        <Route path="/emotions/" component={EmotionsPage} />
-        <Route exact path="/cards/" component={Cards} />
-        <Route path="/cards/:id" component={Card} />
-      </div>
-    </Router>
+    <FullApp></FullApp>
   ), document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

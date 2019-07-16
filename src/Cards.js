@@ -106,4 +106,4 @@ const Cards = () => {
     );
 }
 
-export default withAuthenticator(Cards, true);
+export default Cards;

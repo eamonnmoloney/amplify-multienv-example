@@ -52,4 +52,4 @@ class Card extends Component {
   }
 }
 
-export default withAuthenticator(Card, true);
+export default Card;

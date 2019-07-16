@@ -117,4 +117,4 @@ const EmotionsPage = () => {
     );
 }
 
-export default withAuthenticator(EmotionsPage, true);
+export default EmotionsPage;
