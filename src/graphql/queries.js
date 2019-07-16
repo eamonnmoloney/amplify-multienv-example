@@ -33,6 +33,40 @@ export const listBlogs = `query ListBlogs(
   }
 }
 `;
+export const getCard = `query GetCard($id: ID!) {
+  getCard(id: $id) {
+    id
+    name
+    createdAt
+    posts {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const listCards = `query ListCards(
+  $filter: ModelCardFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listCards(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      createdAt
+      posts {
+        nextToken
+      }
+    }
+    nextToken
+  }
+}
+`;
 export const getPost = `query GetPost($id: ID!) {
   getPost(id: $id) {
     id

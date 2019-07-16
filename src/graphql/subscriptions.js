@@ -46,6 +46,54 @@ export const onDeleteBlog = `subscription OnDeleteBlog {
   }
 }
 `;
+export const onCreateCard = `subscription OnCreateCard {
+  onCreateCard {
+    id
+    name
+    createdAt
+    posts {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const onUpdateCard = `subscription OnUpdateCard {
+  onUpdateCard {
+    id
+    name
+    createdAt
+    posts {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const onDeleteCard = `subscription OnDeleteCard {
+  onDeleteCard {
+    id
+    name
+    createdAt
+    posts {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
+  }
+}
+`;
 export const onCreatePost = `subscription OnCreatePost {
   onCreatePost {
     id

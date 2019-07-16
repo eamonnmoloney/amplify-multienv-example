@@ -4,6 +4,13 @@ type Blog @model {
   posts: [Post] @connection(name: "BlogPosts")
 }
 
+type Card @model {
+  id: ID!
+  name: String!
+  createdAt: AWSDateTime!
+  posts: [Post] @connection(name: "BlogPosts")
+}
+
 type Post @model {
   id: ID!
   title: String!

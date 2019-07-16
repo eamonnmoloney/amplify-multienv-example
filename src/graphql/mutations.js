@@ -46,6 +46,54 @@ export const deleteBlog = `mutation DeleteBlog($input: DeleteBlogInput!) {
   }
 }
 `;
+export const createCard = `mutation CreateCard($input: CreateCardInput!) {
+  createCard(input: $input) {
+    id
+    name
+    createdAt
+    posts {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const updateCard = `mutation UpdateCard($input: UpdateCardInput!) {
+  updateCard(input: $input) {
+    id
+    name
+    createdAt
+    posts {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
+  }
+}
+`;
+export const deleteCard = `mutation DeleteCard($input: DeleteCardInput!) {
+  deleteCard(input: $input) {
+    id
+    name
+    createdAt
+    posts {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
+  }
+}
+`;
 export const createPost = `mutation CreatePost($input: CreatePostInput!) {
   createPost(input: $input) {
     id

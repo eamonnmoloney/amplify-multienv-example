@@ -216,54 +216,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h2>Emotions</h2>
-        <Connect mutation={graphqlOperation(mutations.createEmotion)}>
-          {({ mutation }) => <AddEmotion onCreate={mutation} />}
-        </Connect>
-
-        <Connect
-          query={graphqlOperation(queries.listEmotions)}
-          subscription={graphqlOperation(subscriptions.onCreateEmotion)}
-          onSubscriptionMsg={(prev, { onCreateEmotion }) => {
-            return {
-              listEmotions: {
-                items: [...prev.listEmotions.items, onCreateEmotion]
-              }
-            };
-          }}
-        >
-          {({ data: { listEmotions }, loading, error }) => {
-            if (error) return <h3>Error</h3>;
-            if (loading) return <h3>Loading...</h3>;
-            if (listEmotions && listEmotions.items.length !== 0) return <EmotionListView emotions={listEmotions.items}></EmotionListView>
-            return <h3>No emotions yet...</h3>            
-          }}
-        </Connect>
-
-        <h2>Add Blog</h2>
-        <Connect mutation={graphqlOperation(mutations.createBlog)}>
-          {({ mutation }) => <AddTodo onCreate={mutation} />}
-        </Connect>        
-
-        <Connect
-          query={graphqlOperation(queries.listBlogs)}
-          subscription={graphqlOperation(subscriptions.onCreateBlog)}
-          onSubscriptionMsg={(prev, { onCreateBlog }) => {            
-            return {
-              listBlogs: {
-                items: [...prev.listBlogs.items, onCreateBlog]
-              }
-            };
-          }}
-        >
-          {({ data: { listBlogs }, loading, error }) => {
-            if (error) return <h3>Error</h3>;
-            if (loading) return <h3>Loading...</h3>;
-            if (listBlogs && listBlogs.items.length !== 0) return <ListView blogs={listBlogs.items}></ListView>
-            return <h3>No blogs yet...</h3>
-            
-          }}
-        </Connect>
+        <h2>Graph goes here</h2>        
       </div>
     );
   }
