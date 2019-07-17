@@ -19,6 +19,11 @@ export const emotionsForCard = `query EmotionsForCard($cardId: ID!, $limit: Int,
         nextToken
       }
       intensity
+      parent {
+        id
+        title
+        intensity
+      }
     }
     nextToken
   }
@@ -131,6 +136,28 @@ export const getPost = `query GetPost($id: ID!) {
       nextToken
     }
     intensity
+    parent {
+      id
+      title
+      blog {
+        id
+        name
+      }
+      card {
+        id
+        name
+        createdAt
+      }
+      comments {
+        nextToken
+      }
+      intensity
+      parent {
+        id
+        title
+        intensity
+      }
+    }
   }
 }
 `;
@@ -156,6 +183,11 @@ export const listPosts = `query ListPosts(
         nextToken
       }
       intensity
+      parent {
+        id
+        title
+        intensity
+      }
     }
     nextToken
   }
@@ -181,6 +213,11 @@ export const getComment = `query GetComment($id: ID!) {
         nextToken
       }
       intensity
+      parent {
+        id
+        title
+        intensity
+      }
     }
   }
 }
@@ -210,6 +247,18 @@ export const getEmotion = `query GetEmotion($id: ID!) {
     name
     intensity
     lastUpdated
+    parent {
+      id
+      name
+      intensity
+      lastUpdated
+      parent {
+        id
+        name
+        intensity
+        lastUpdated
+      }
+    }
   }
 }
 `;
@@ -224,6 +273,12 @@ export const listEmotions = `query ListEmotions(
       name
       intensity
       lastUpdated
+      parent {
+        id
+        name
+        intensity
+        lastUpdated
+      }
     }
     nextToken
   }

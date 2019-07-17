@@ -3,7 +3,7 @@ import Amplify, { API, graphqlOperation } from "aws-amplify";
 import { withAuthenticator, Connect } from "aws-amplify-react";
 import 'rc-slider/assets/index.css';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, TextField, Grid, List, Typography, Slider, Card as MaterialCard, CardHeader, CardContent } from "@material-ui/core";
+import { Button, TextField, Grid, List, Typography, Slider, Card as MaterialCard, CardHeader, CardContent, GridList, GridListTile, ListItem } from "@material-ui/core";
 import {
   Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis,
 } from 'recharts';
@@ -16,24 +16,43 @@ import * as queries from "./graphql/queries";
 
 Amplify.configure(awsConfig);
 
+const tmp1 = (emotion) => (
+  <div>
+    <ListItem>
+      <Typography variant="body1" color="textSecondary" component="p">{emotion.title}</Typography>
+    </ListItem>    
+    {emotion.child ? 
+    (<List>
+      {emotion.child.map(child1 => {
+          return tmp1(child1)})}
+    </List>)
+    : <div></div>}
+  </div>
+  
+)
+
 const EmotionListView = ({ emotions }) => {
-      let data = emotions.sort((a,b)=> {
-        if(a.title.toLowerCase() < b.title.toLowerCase()) { return -1; }
-        if(a.title.toLowerCase() > b.title.toLowerCase()) { return 1; }
-        return 0;
-      }).map(emotion => ({
-          subject: emotion.title, A: emotion.intensity, B: emotion.intensity, fullMark: 100,
-        })
-      );
+  const ems = [].concat(emotions);
+  const groupedEmotions = emotions.map(em => {
+    if(!em.parent) {
+      return em;
+    }
+    const parent = ems.filter(e => e.id === em.parent.id)[0]
+    if(!parent.child){
+      parent.child = [];
+    }
+    parent.child = parent.child.concat(em);
+    return em;
+  }).filter(em => !em.parent);
 
   return (
-    <RadarChart cx={300} cy={250} outerRadius={100} width={500} height={500} data={data}>
-      <PolarGrid />
-      <PolarAngleAxis dataKey="subject" />
-      <PolarRadiusAxis />
-      <Radar name="Mike" dataKey="A" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6} />
-    </RadarChart>
-  )
+  <div>
+    <List>
+      {groupedEmotions.map(emotion => {
+        return tmp1(emotion)               
+      })}
+    </List>
+  </div>)
 };
 
 class Card extends Component {

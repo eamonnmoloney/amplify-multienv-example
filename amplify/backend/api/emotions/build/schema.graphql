@@ -19,6 +19,7 @@ type Post {
   card: Card
   comments(filter: ModelCommentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCommentConnection
   intensity: Int
+  parent: Post
 }
 
 type Comment {
@@ -32,6 +33,7 @@ type Emotion {
   name: String!
   intensity: Int
   lastUpdated: String
+  parent: Emotion
 }
 
 type EmotionConnection {
@@ -226,6 +228,7 @@ input CreatePostInput {
   intensity: Int
   postBlogId: ID
   postCardId: ID
+  postParentId: ID
 }
 
 input UpdatePostInput {
@@ -234,6 +237,7 @@ input UpdatePostInput {
   intensity: Int
   postBlogId: ID
   postCardId: ID
+  postParentId: ID
 }
 
 input DeletePostInput {
@@ -289,6 +293,7 @@ input CreateEmotionInput {
   name: String!
   intensity: Int
   lastUpdated: String
+  emotionParentId: ID
 }
 
 input UpdateEmotionInput {
@@ -296,6 +301,7 @@ input UpdateEmotionInput {
   name: String
   intensity: Int
   lastUpdated: String
+  emotionParentId: ID
 }
 
 input DeleteEmotionInput {

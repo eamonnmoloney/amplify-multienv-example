@@ -19,6 +19,7 @@ type Post @model {
   card: Card @connection(name: "CardPosts")
   comments: [Comment] @connection(name: "PostComments"),
   intensity: Int,
+  parent: Post @connection(name: "ChildPosts")
 }
 
 type Comment @model {
@@ -32,6 +33,7 @@ type Emotion @model {
   name: String!,
   intensity: Int,
   lastUpdated: String,
+  parent: Emotion @connection(name: "ChildEmotions")
 }
 
 type EmotionConnection {

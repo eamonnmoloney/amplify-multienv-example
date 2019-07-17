@@ -58,9 +58,32 @@ class AddTodo extends Component {
     this.setState({ name: new Date(), createdAt: new Date() });    
     const card = (await onCreate({ input })).data.createCard;
     const emotions = (await API.graphql(graphqlOperation(queries.listEmotions, {limit: 150}))).data.listEmotions.items;
-    emotions.map(async emotion => {
-      await API.graphql(graphqlOperation(mutations.createPost, {input:{title:emotion.name, postCardId: card.id, intensity:0}}));
-    });
+    
+    let rootPosts = await Promise.all(emotions.filter(emotion => !emotion.parent).map(async emotion => {      
+      return (await API.graphql(graphqlOperation(mutations.createPost, {input:{title:emotion.name, postCardId: card.id, intensity:0}}))).data.createPost;
+    }));
+
+    rootPosts = await Promise.all(emotions
+      .filter(emotion => emotion.parent)
+      .filter(emotion => {
+        return emotions.filter(em => !em.parent).filter(em => em.name === emotion.parent.name).length !== 0
+      }).map(async emotion => {
+        const root = rootPosts.filter(post => post.title === emotion.parent.name);
+        const parentId = root.length > 0 ? root[0].id : null;
+        return (await API.graphql(graphqlOperation(mutations.createPost, {input:{title:emotion.name, postCardId: card.id, intensity:0, postParentId: parentId}}))).data.createPost;
+      }));
+    
+    await Promise.all(emotions
+      .filter(emotion => emotion.parent)
+      .filter(emotion => {
+        return emotions.filter(em => em.parent).filter(em => em.name === emotion.parent.name).length !== 0
+      }).map(async emotion => {
+        console.log(JSON.stringify(emotion))
+        const root = rootPosts.filter(post => post.title === emotion.parent.name);
+        console.log(JSON.stringify(rootPosts))
+        const parentId = root.length > 0 ? root[0].id : null;
+        await API.graphql(graphqlOperation(mutations.createPost, {input:{title:emotion.name, postCardId: card.id, intensity:0, postParentId: parentId}}));
+      }));    
   }
 
   render() {

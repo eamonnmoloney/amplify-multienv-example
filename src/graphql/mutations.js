@@ -148,6 +148,28 @@ export const createPost = `mutation CreatePost($input: CreatePostInput!) {
       nextToken
     }
     intensity
+    parent {
+      id
+      title
+      blog {
+        id
+        name
+      }
+      card {
+        id
+        name
+        createdAt
+      }
+      comments {
+        nextToken
+      }
+      intensity
+      parent {
+        id
+        title
+        intensity
+      }
+    }
   }
 }
 `;
@@ -181,6 +203,28 @@ export const updatePost = `mutation UpdatePost($input: UpdatePostInput!) {
       nextToken
     }
     intensity
+    parent {
+      id
+      title
+      blog {
+        id
+        name
+      }
+      card {
+        id
+        name
+        createdAt
+      }
+      comments {
+        nextToken
+      }
+      intensity
+      parent {
+        id
+        title
+        intensity
+      }
+    }
   }
 }
 `;
@@ -214,6 +258,28 @@ export const deletePost = `mutation DeletePost($input: DeletePostInput!) {
       nextToken
     }
     intensity
+    parent {
+      id
+      title
+      blog {
+        id
+        name
+      }
+      card {
+        id
+        name
+        createdAt
+      }
+      comments {
+        nextToken
+      }
+      intensity
+      parent {
+        id
+        title
+        intensity
+      }
+    }
   }
 }
 `;
@@ -237,6 +303,11 @@ export const createComment = `mutation CreateComment($input: CreateCommentInput!
         nextToken
       }
       intensity
+      parent {
+        id
+        title
+        intensity
+      }
     }
   }
 }
@@ -261,6 +332,11 @@ export const updateComment = `mutation UpdateComment($input: UpdateCommentInput!
         nextToken
       }
       intensity
+      parent {
+        id
+        title
+        intensity
+      }
     }
   }
 }
@@ -285,6 +361,11 @@ export const deleteComment = `mutation DeleteComment($input: DeleteCommentInput!
         nextToken
       }
       intensity
+      parent {
+        id
+        title
+        intensity
+      }
     }
   }
 }
@@ -295,6 +376,18 @@ export const createEmotion = `mutation CreateEmotion($input: CreateEmotionInput!
     name
     intensity
     lastUpdated
+    parent {
+      id
+      name
+      intensity
+      lastUpdated
+      parent {
+        id
+        name
+        intensity
+        lastUpdated
+      }
+    }
   }
 }
 `;
@@ -304,6 +397,18 @@ export const updateEmotion = `mutation UpdateEmotion($input: UpdateEmotionInput!
     name
     intensity
     lastUpdated
+    parent {
+      id
+      name
+      intensity
+      lastUpdated
+      parent {
+        id
+        name
+        intensity
+        lastUpdated
+      }
+    }
   }
 }
 `;
@@ -313,6 +418,18 @@ export const deleteEmotion = `mutation DeleteEmotion($input: DeleteEmotionInput!
     name
     intensity
     lastUpdated
+    parent {
+      id
+      name
+      intensity
+      lastUpdated
+      parent {
+        id
+        name
+        intensity
+        lastUpdated
+      }
+    }
   }
 }
 `;

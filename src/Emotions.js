@@ -3,7 +3,7 @@ import Amplify, { API, graphqlOperation } from "aws-amplify";
 import { withAuthenticator, Connect } from "aws-amplify-react";
 import 'rc-slider/assets/index.css';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, TextField, Grid, List, ListItem } from "@material-ui/core";
+import { Button, TextField, Grid, List, ListItem, Select, MenuItem } from "@material-ui/core";
 
 import "./App.css";
 
@@ -34,7 +34,7 @@ const EmotionListView = ({ emotions }) => {
     }).map(emotion => (
         <ListItem key={emotion.id} style={{justifyContent:'center'}}>
           <Grid container spacing={5} direction="row" justify="center" alignItems="center">
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <TextField
                 name="name"
                 defaultValue={emotion.name}
@@ -52,8 +52,24 @@ const EmotionListView = ({ emotions }) => {
                   shrink: true,
                 }}
               />     
+              </Grid>
+              <Grid item xs={4}>
+                <Select
+                  value={emotion.parent ? emotion.parent.id : ''}
+                  onChange={(e)=>{
+                    API.graphql(graphqlOperation(mutations.updateEmotion, {input: {emotionParentId: e.target.value, id: emotion.id}}))
+                  }}
+                >
+                  {emotions.sort((a,b)=> {
+                    if(a.name.toLowerCase() < b.name.toLowerCase()) { return -1; }
+                    if(a.name.toLowerCase() > b.name.toLowerCase()) { return 1; }
+                    return 0;
+                  }).map(emotion1 => (
+                    <MenuItem value={emotion1.id}>{emotion1.name}</MenuItem>
+                  ))}
+                </Select> 
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <Button variant="contained" color="secondary" className={classes.button} onClick={(e) => {
                   API.graphql(graphqlOperation(mutations.deleteEmotion, {input: {id: emotion.id}}))
                 } }>
@@ -107,7 +123,7 @@ class AddEmotion extends Component {
             InputLabelProps={{
               shrink: true,
             }}
-          />        
+          />                 
         </Grid>
         <Grid item xs={6}>
           <Button variant="contained" fullWidth className={this.props.classes.button} onClick={this.submit.bind(this)}>

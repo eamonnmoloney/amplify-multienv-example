@@ -148,6 +148,28 @@ export const onCreatePost = `subscription OnCreatePost {
       nextToken
     }
     intensity
+    parent {
+      id
+      title
+      blog {
+        id
+        name
+      }
+      card {
+        id
+        name
+        createdAt
+      }
+      comments {
+        nextToken
+      }
+      intensity
+      parent {
+        id
+        title
+        intensity
+      }
+    }
   }
 }
 `;
@@ -181,6 +203,28 @@ export const onUpdatePost = `subscription OnUpdatePost {
       nextToken
     }
     intensity
+    parent {
+      id
+      title
+      blog {
+        id
+        name
+      }
+      card {
+        id
+        name
+        createdAt
+      }
+      comments {
+        nextToken
+      }
+      intensity
+      parent {
+        id
+        title
+        intensity
+      }
+    }
   }
 }
 `;
@@ -214,6 +258,28 @@ export const onDeletePost = `subscription OnDeletePost {
       nextToken
     }
     intensity
+    parent {
+      id
+      title
+      blog {
+        id
+        name
+      }
+      card {
+        id
+        name
+        createdAt
+      }
+      comments {
+        nextToken
+      }
+      intensity
+      parent {
+        id
+        title
+        intensity
+      }
+    }
   }
 }
 `;
@@ -237,6 +303,11 @@ export const onCreateComment = `subscription OnCreateComment {
         nextToken
       }
       intensity
+      parent {
+        id
+        title
+        intensity
+      }
     }
   }
 }
@@ -261,6 +332,11 @@ export const onUpdateComment = `subscription OnUpdateComment {
         nextToken
       }
       intensity
+      parent {
+        id
+        title
+        intensity
+      }
     }
   }
 }
@@ -285,6 +361,11 @@ export const onDeleteComment = `subscription OnDeleteComment {
         nextToken
       }
       intensity
+      parent {
+        id
+        title
+        intensity
+      }
     }
   }
 }
@@ -295,6 +376,18 @@ export const onCreateEmotion = `subscription OnCreateEmotion {
     name
     intensity
     lastUpdated
+    parent {
+      id
+      name
+      intensity
+      lastUpdated
+      parent {
+        id
+        name
+        intensity
+        lastUpdated
+      }
+    }
   }
 }
 `;
@@ -304,6 +397,18 @@ export const onUpdateEmotion = `subscription OnUpdateEmotion {
     name
     intensity
     lastUpdated
+    parent {
+      id
+      name
+      intensity
+      lastUpdated
+      parent {
+        id
+        name
+        intensity
+        lastUpdated
+      }
+    }
   }
 }
 `;
@@ -313,6 +418,18 @@ export const onDeleteEmotion = `subscription OnDeleteEmotion {
     name
     intensity
     lastUpdated
+    parent {
+      id
+      name
+      intensity
+      lastUpdated
+      parent {
+        id
+        name
+        intensity
+        lastUpdated
+      }
+    }
   }
 }
 `;
