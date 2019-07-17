@@ -9,12 +9,14 @@ type Card @model {
   name: String!
   createdAt: AWSDateTime!
   posts: [Post] @connection(name: "BlogPosts")
+  emotions: [Post] @connection(name: "CardPosts")
 }
 
 type Post @model {
   id: ID!
   title: String!
   blog: Blog @connection(name: "BlogPosts")
+  card: Card @connection(name: "CardPosts")
   comments: [Comment] @connection(name: "PostComments"),
   intensity: Int,
 }
@@ -30,4 +32,13 @@ type Emotion @model {
   name: String!,
   intensity: Int,
   lastUpdated: String,
+}
+
+type EmotionConnection {
+  items: [Post]
+  nextToken: String
+}
+
+type Query {
+  emotionsForCard(cardId: ID!, limit: Int, nextToken: String): EmotionConnection
 }

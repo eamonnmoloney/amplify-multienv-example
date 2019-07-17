@@ -116,6 +116,10 @@
                     {
                         "AttributeName": "postBlogId",
                         "AttributeType": "S"
+                    },
+                    {
+                        "AttributeName": "postCardId",
+                        "AttributeType": "S"
                     }
                 ],
                 "StreamSpecification": {
@@ -166,6 +170,34 @@
                         "KeySchema": [
                             {
                                 "AttributeName": "postBlogId",
+                                "KeyType": "HASH"
+                            }
+                        ],
+                        "Projection": {
+                            "ProjectionType": "ALL"
+                        },
+                        "ProvisionedThroughput": {
+                            "Fn::If": [
+                                "ShouldUsePayPerRequestBilling",
+                                {
+                                    "Ref": "AWS::NoValue"
+                                },
+                                {
+                                    "ReadCapacityUnits": {
+                                        "Ref": "DynamoDBModelTableReadIOPS"
+                                    },
+                                    "WriteCapacityUnits": {
+                                        "Ref": "DynamoDBModelTableWriteIOPS"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "IndexName": "gsi-CardPosts",
+                        "KeySchema": [
+                            {
+                                "AttributeName": "postCardId",
                                 "KeyType": "HASH"
                             }
                         ],

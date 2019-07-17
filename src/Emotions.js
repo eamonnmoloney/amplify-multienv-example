@@ -23,15 +23,48 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const EmotionListView = ({ emotions }) => (
+const EmotionListView = ({ emotions }) => {
+  const classes = useStyles();
+  return (
   <List>
-    {emotions.map(emotion => (
+    {emotions.sort((a,b)=> {
+      if(a.name.toLowerCase() < b.name.toLowerCase()) { return -1; }
+      if(a.name.toLowerCase() > b.name.toLowerCase()) { return 1; }
+      return 0;
+    }).map(emotion => (
         <ListItem key={emotion.id} style={{justifyContent:'center'}}>
-          {emotion.name}          
+          <Grid container spacing={5} direction="row" justify="center" alignItems="center">
+            <Grid item xs={6}>
+              <TextField
+                name="name"
+                defaultValue={emotion.name}
+                onChange={(e) => {
+                  API.graphql(graphqlOperation(mutations.updateEmotion, {input: {name: e.target.value, id: emotion.id}}))
+                } }
+                className={classes.textField}
+                id="standard-full-width"
+                label="Label"
+                style={{ margin: 8 }}
+                placeholder="Name"
+                fullWidth
+                margin="normal"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />     
+            </Grid>
+            <Grid item xs={6}>
+              <Button variant="contained" color="secondary" className={classes.button} onClick={(e) => {
+                  API.graphql(graphqlOperation(mutations.deleteEmotion, {input: {id: emotion.id}}))
+                } }>
+                Delete
+              </Button>
+            </Grid>
+          </Grid>      
         </ListItem>
       ))}
   </List>
-);
+)};
 
 class AddEmotion extends Component {
   constructor(props) {
@@ -96,7 +129,7 @@ const EmotionsPage = () => {
         </Connect>
 
         <Connect
-          query={graphqlOperation(queries.listEmotions)}
+          query={graphqlOperation(queries.listEmotions, {limit: 150})}
           subscription={graphqlOperation(subscriptions.onCreateEmotion)}
           onSubscriptionMsg={(prev, { onCreateEmotion }) => {
             return {

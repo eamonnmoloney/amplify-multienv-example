@@ -9,12 +9,14 @@ type Card {
   name: String!
   createdAt: AWSDateTime!
   posts(filter: ModelPostFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPostConnection
+  emotions(filter: ModelPostFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPostConnection
 }
 
 type Post {
   id: ID!
   title: String!
   blog: Blog
+  card: Card
   comments(filter: ModelCommentFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelCommentConnection
   intensity: Int
 }
@@ -30,6 +32,25 @@ type Emotion {
   name: String!
   intensity: Int
   lastUpdated: String
+}
+
+type EmotionConnection {
+  items: [Post]
+  nextToken: String
+}
+
+type Query {
+  emotionsForCard(cardId: ID!, limit: Int, nextToken: String): EmotionConnection
+  getBlog(id: ID!): Blog
+  listBlogs(filter: ModelBlogFilterInput, limit: Int, nextToken: String): ModelBlogConnection
+  getCard(id: ID!): Card
+  listCards(filter: ModelCardFilterInput, limit: Int, nextToken: String): ModelCardConnection
+  getPost(id: ID!): Post
+  listPosts(filter: ModelPostFilterInput, limit: Int, nextToken: String): ModelPostConnection
+  getComment(id: ID!): Comment
+  listComments(filter: ModelCommentFilterInput, limit: Int, nextToken: String): ModelCommentConnection
+  getEmotion(id: ID!): Emotion
+  listEmotions(filter: ModelEmotionFilterInput, limit: Int, nextToken: String): ModelEmotionConnection
 }
 
 enum ModelSortDirection {
@@ -103,19 +124,6 @@ input ModelBlogFilterInput {
   and: [ModelBlogFilterInput]
   or: [ModelBlogFilterInput]
   not: ModelBlogFilterInput
-}
-
-type Query {
-  getBlog(id: ID!): Blog
-  listBlogs(filter: ModelBlogFilterInput, limit: Int, nextToken: String): ModelBlogConnection
-  getCard(id: ID!): Card
-  listCards(filter: ModelCardFilterInput, limit: Int, nextToken: String): ModelCardConnection
-  getPost(id: ID!): Post
-  listPosts(filter: ModelPostFilterInput, limit: Int, nextToken: String): ModelPostConnection
-  getComment(id: ID!): Comment
-  listComments(filter: ModelCommentFilterInput, limit: Int, nextToken: String): ModelCommentConnection
-  getEmotion(id: ID!): Emotion
-  listEmotions(filter: ModelEmotionFilterInput, limit: Int, nextToken: String): ModelEmotionConnection
 }
 
 input CreateBlogInput {
@@ -217,6 +225,7 @@ input CreatePostInput {
   title: String!
   intensity: Int
   postBlogId: ID
+  postCardId: ID
 }
 
 input UpdatePostInput {
@@ -224,6 +233,7 @@ input UpdatePostInput {
   title: String
   intensity: Int
   postBlogId: ID
+  postCardId: ID
 }
 
 input DeletePostInput {

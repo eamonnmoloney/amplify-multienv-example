@@ -112,7 +112,7 @@
                         {
                             "Ref": "APIKeyExpirationEpoch"
                         },
-                        1563870173
+                        1563961448
                     ]
                 }
             },
@@ -550,6 +550,7 @@
                 "GraphQLSchema",
                 "Post",
                 "Blog",
+                "Card",
                 "Comment"
             ]
         },

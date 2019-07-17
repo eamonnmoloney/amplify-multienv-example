@@ -28,7 +28,7 @@ const ListView = ({ classes, cards }) => (
     }).reverse().map(card => (
       <ListItem key={card.id} style={{padding:10, justifyContent: 'center'}}>
         <Paper className={classes.root}>
-          <Link component={RouterLink}  to={`/cards/${card.id}`}>{card.name}</Link>
+          <Link component={RouterLink} to={`/cards/${card.id}`}>{card.name}</Link>
         </Paper>
       </ListItem>
     ))}
@@ -57,9 +57,9 @@ class AddTodo extends Component {
 
     this.setState({ name: new Date(), createdAt: new Date() });    
     const card = (await onCreate({ input })).data.createCard;
-    const emotions = (await API.graphql(graphqlOperation(queries.listEmotions))).data.listEmotions.items;
+    const emotions = (await API.graphql(graphqlOperation(queries.listEmotions, {limit: 150}))).data.listEmotions.items;
     emotions.map(async emotion => {
-      await API.graphql(graphqlOperation(mutations.createPost, {input:{title:emotion.name, postBlogId: card.id, intensity:0}}));
+      await API.graphql(graphqlOperation(mutations.createPost, {input:{title:emotion.name, postCardId: card.id, intensity:0}}));
     });
   }
 
@@ -84,7 +84,7 @@ const Cards = () => {
         </Connect>        
 
         <Connect
-          query={graphqlOperation(queries.listCards, {createdAt:{beginsWith:2018}})}
+          query={graphqlOperation(queries.listCards, {limit:150})}
           subscription={graphqlOperation(subscriptions.onCreateCard)}
           onSubscriptionMsg={(prev, { onCreateCard }) => {            
             return {

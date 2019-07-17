@@ -1,6 +1,29 @@
 // eslint-disable
 // this is an auto generated file. This will be overwritten
 
+export const emotionsForCard = `query EmotionsForCard($cardId: ID!, $limit: Int, $nextToken: String) {
+  emotionsForCard(cardId: $cardId, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      title
+      blog {
+        id
+        name
+      }
+      card {
+        id
+        name
+        createdAt
+      }
+      comments {
+        nextToken
+      }
+      intensity
+    }
+    nextToken
+  }
+}
+`;
 export const getBlog = `query GetBlog($id: ID!) {
   getBlog(id: $id) {
     id
@@ -46,6 +69,14 @@ export const getCard = `query GetCard($id: ID!) {
       }
       nextToken
     }
+    emotions {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -62,6 +93,9 @@ export const listCards = `query ListCards(
       posts {
         nextToken
       }
+      emotions {
+        nextToken
+      }
     }
     nextToken
   }
@@ -75,6 +109,17 @@ export const getPost = `query GetPost($id: ID!) {
       id
       name
       posts {
+        nextToken
+      }
+    }
+    card {
+      id
+      name
+      createdAt
+      posts {
+        nextToken
+      }
+      emotions {
         nextToken
       }
     }
@@ -102,6 +147,11 @@ export const listPosts = `query ListPosts(
         id
         name
       }
+      card {
+        id
+        name
+        createdAt
+      }
       comments {
         nextToken
       }
@@ -121,6 +171,11 @@ export const getComment = `query GetComment($id: ID!) {
       blog {
         id
         name
+      }
+      card {
+        id
+        name
+        createdAt
       }
       comments {
         nextToken

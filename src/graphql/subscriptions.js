@@ -59,6 +59,14 @@ export const onCreateCard = `subscription OnCreateCard {
       }
       nextToken
     }
+    emotions {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -68,6 +76,14 @@ export const onUpdateCard = `subscription OnUpdateCard {
     name
     createdAt
     posts {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
+    emotions {
       items {
         id
         title
@@ -91,6 +107,14 @@ export const onDeleteCard = `subscription OnDeleteCard {
       }
       nextToken
     }
+    emotions {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -102,6 +126,17 @@ export const onCreatePost = `subscription OnCreatePost {
       id
       name
       posts {
+        nextToken
+      }
+    }
+    card {
+      id
+      name
+      createdAt
+      posts {
+        nextToken
+      }
+      emotions {
         nextToken
       }
     }
@@ -127,6 +162,17 @@ export const onUpdatePost = `subscription OnUpdatePost {
         nextToken
       }
     }
+    card {
+      id
+      name
+      createdAt
+      posts {
+        nextToken
+      }
+      emotions {
+        nextToken
+      }
+    }
     comments {
       items {
         id
@@ -146,6 +192,17 @@ export const onDeletePost = `subscription OnDeletePost {
       id
       name
       posts {
+        nextToken
+      }
+    }
+    card {
+      id
+      name
+      createdAt
+      posts {
+        nextToken
+      }
+      emotions {
         nextToken
       }
     }
@@ -171,6 +228,11 @@ export const onCreateComment = `subscription OnCreateComment {
         id
         name
       }
+      card {
+        id
+        name
+        createdAt
+      }
       comments {
         nextToken
       }
@@ -190,6 +252,11 @@ export const onUpdateComment = `subscription OnUpdateComment {
         id
         name
       }
+      card {
+        id
+        name
+        createdAt
+      }
       comments {
         nextToken
       }
@@ -208,6 +275,11 @@ export const onDeleteComment = `subscription OnDeleteComment {
       blog {
         id
         name
+      }
+      card {
+        id
+        name
+        createdAt
       }
       comments {
         nextToken

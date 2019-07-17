@@ -59,6 +59,14 @@ export const createCard = `mutation CreateCard($input: CreateCardInput!) {
       }
       nextToken
     }
+    emotions {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -68,6 +76,14 @@ export const updateCard = `mutation UpdateCard($input: UpdateCardInput!) {
     name
     createdAt
     posts {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
+    emotions {
       items {
         id
         title
@@ -91,6 +107,14 @@ export const deleteCard = `mutation DeleteCard($input: DeleteCardInput!) {
       }
       nextToken
     }
+    emotions {
+      items {
+        id
+        title
+        intensity
+      }
+      nextToken
+    }
   }
 }
 `;
@@ -102,6 +126,17 @@ export const createPost = `mutation CreatePost($input: CreatePostInput!) {
       id
       name
       posts {
+        nextToken
+      }
+    }
+    card {
+      id
+      name
+      createdAt
+      posts {
+        nextToken
+      }
+      emotions {
         nextToken
       }
     }
@@ -127,6 +162,17 @@ export const updatePost = `mutation UpdatePost($input: UpdatePostInput!) {
         nextToken
       }
     }
+    card {
+      id
+      name
+      createdAt
+      posts {
+        nextToken
+      }
+      emotions {
+        nextToken
+      }
+    }
     comments {
       items {
         id
@@ -146,6 +192,17 @@ export const deletePost = `mutation DeletePost($input: DeletePostInput!) {
       id
       name
       posts {
+        nextToken
+      }
+    }
+    card {
+      id
+      name
+      createdAt
+      posts {
+        nextToken
+      }
+      emotions {
         nextToken
       }
     }
@@ -171,6 +228,11 @@ export const createComment = `mutation CreateComment($input: CreateCommentInput!
         id
         name
       }
+      card {
+        id
+        name
+        createdAt
+      }
       comments {
         nextToken
       }
@@ -190,6 +252,11 @@ export const updateComment = `mutation UpdateComment($input: UpdateCommentInput!
         id
         name
       }
+      card {
+        id
+        name
+        createdAt
+      }
       comments {
         nextToken
       }
@@ -208,6 +275,11 @@ export const deleteComment = `mutation DeleteComment($input: DeleteCommentInput!
       blog {
         id
         name
+      }
+      card {
+        id
+        name
+        createdAt
       }
       comments {
         nextToken

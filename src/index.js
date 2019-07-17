@@ -2,10 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import FullApp from './FullApp';
-import App from './App';
-import EmotionsPage from './Emotions';
-import Card from './Card';
-import Cards from './Cards';
 import * as serviceWorker from './serviceWorker';
 // First we import some modules...
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
