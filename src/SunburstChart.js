@@ -96,7 +96,7 @@ const SunburstChart = props => {
   console.log(ref)
   console.log("I render")
   if(props.data){
-    return <svg viewBox="-486.5,-486.4996032714844,973,972.9996337890625" style={{maxWidth: '100%', height: 'auto', font: '10px sans-serif', margin: '5px', cursor: 'pointer' }} ref={ ref } /> 
+    return <svg viewBox="-486.5,-486.4996032714844,973,972.9996337890625" style={{maxWidth: '100%', height: 'auto', font: '1rem sans-serif', margin: '5px', cursor: 'pointer' }} ref={ ref } /> 
     //return <div ref={ref}></div>
   }else { 
     return <div id="#sunburst">Loading...</div> 
