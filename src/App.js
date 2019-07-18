@@ -102,7 +102,15 @@ class App extends Component {
       .selectAll("path")
       .data(root.descendants().filter(d => d.depth))
       .enter().append("path")
-        .attr("fill", d => { while (d.depth > 1) d = d.parent; console.log(d); if(d.data.intensity === 0){return '000'}return color(d.data.name); })
+        .attr("fill", d => { 
+          if(d.data.intensity === 0) {
+            return d3.color("black");
+          }
+          while (d.depth > 1) 
+            d = d.parent; 
+            
+          return color(d.data.name);
+         })         
         .attr("d", arc)
       .append("title")
         .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);

@@ -4,7 +4,6 @@ import './index.css';
 import FullApp from './FullApp';
 import * as serviceWorker from './serviceWorker';
 // First we import some modules...
-import { BrowserRouter as Router, Route, Link } from 'react-router-dom'
 
 ReactDOM.render((
     <FullApp></FullApp>
