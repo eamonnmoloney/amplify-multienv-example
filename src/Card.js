@@ -17,7 +17,7 @@ import * as queries from "./graphql/queries";
 Amplify.configure(awsConfig);
 
 const tmp1 = (emotion) => (
-  <div>
+  <div key={emotion.id}>
     <ListItem>
       <Typography variant="body1" color="textSecondary" component="p">{emotion.title}</Typography>
     </ListItem>    
