@@ -9,24 +9,24 @@ import awsConfig from "./aws-exports";
 import * as mutations from "./graphql/mutations";
 import * as queries from "./graphql/queries";
 import * as subscriptions from "./graphql/subscriptions";
+import SunburstChart from './SunburstChart';
 
 const d3 = require("d3")
 
 Amplify.configure(awsConfig);
 
 class App extends Component {
-  state = {
-    data: null,
-  };
-
-  onSelect(event){
-    console.log(event);
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: null
+    };    
   }
 
-  componentWillMount() {
-    this.sunburst().then(data => {
-      console.log("done")
-    })
+  componentDidMount(){
+    this.buildData().then(data => {
+      this.setState({ data })      
+    });
   }
 
   addSizeWhenNoChildren(em){
@@ -39,110 +39,74 @@ class App extends Component {
   }
 
   async buildData(){
-    const listOfCards = await Promise.all([API.graphql(graphqlOperation(queries.listCards, {limit: 150}))]);
-    const emotions = await Promise.all(listOfCards[0].data.listCards.items.map(async card => {
+    let ems = [];
+    let emap = new Map()
+    const listOfCards = await API.graphql(graphqlOperation(queries.listCards, {limit: 150}));
+    await Promise.all(listOfCards.data.listCards.items.map(async card => {      
       const ems1 = (await API.graphql(graphqlOperation(queries.emotionsForCard, {cardId: card.id, limit: 150}))).data.emotionsForCard.items;
-      const ems = [].concat(ems1);
-      const groupedEmotions = ems.map(em => {
-        em.name = em.title;
-        if(!em.parent) {
-          return em;
-        }
-        const parent = ems.filter(e => e.id === em.parent.id)[0]
-        if(!parent.children){
-          parent.children = [];
-        }
-        parent.children = parent.children.concat(em);
-        return em;
-      }).filter(em => !em.parent);
-      
-      return groupedEmotions;
+      ems1.forEach(element => {
+        if(emap.has(element.title)){
+          emap.get(element.title).push(element)
+          return
+        }       
+        emap.set(element.title, [element]) 
+      });
     }));
 
-    const rootEm = emotions[0];
-
-    rootEm.map(re => this.addSizeWhenNoChildren(re));
-
-    console.log(rootEm)
-
-    return { name: "root", children:rootEm};
-  }
-
-  async sunburst() {
-    const data = await this.buildData();
+    for(const next of emap.values()) {
+      ems.push(next.reduce((a, c) => {
+        a.intensity = a.intensity + c.intensity
+        return a
+      }))
+    }
     
-    const color = d3.scaleOrdinal(d3.quantize(d3.interpolateRainbow, data.children.length + 1))
-    const format = d3.format(",d")
-    const width = 975
-    const radius = width / 2
-    const arc = d3.arc()
-      .startAngle(d => d.x0)
-      .endAngle(d => d.x1)
-      .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
-      .padRadius(radius / 2)
-      .innerRadius(d => d.y0)
-      .outerRadius(d => d.y1 - 1)
+    let groupedEmotions = ems.map(em => {
+      em.name = em.title;
+      if(!em.parent) {
+        return em;
+      }
       
-    const partition = data1 => d3.partition()
-        .size([2 * Math.PI, radius])
-      (d3.hierarchy(data1)
-        .sum(d => d.value)
-        .sort((a, b) => b.value - a.value))
+      const parent = ems.filter(e => e.title === em.parent.title)[0]
+      
+      if(!parent.children){
+        parent.children = [];
+      }
+      parent.children = parent.children.concat(em);
+      return em;
+    }).filter(em => !em.parent);
 
-    const root = partition(data);
-  
-    const svg = d3.select('div#sunburst').append("svg")
-        .style("max-width", "100%")
-        .style("height", "auto")
-        .style("font", "10px sans-serif")
-        .style("margin", "5px");
-    
-    svg.append("g")
-        .attr("fill-opacity", 0.6)
-      .selectAll("path")
-      .data(root.descendants().filter(d => d.depth))
-      .enter().append("path")
-        .attr("fill", d => { 
-          if(d.data.intensity === 0) {
-            return d3.color("black");
-          }
-          while (d.depth > 1) 
-            d = d.parent; 
-            
-          return color(d.data.name);
-         })         
-        .attr("d", arc)
-      .append("title")
-        .text(d => `${d.ancestors().map(d => d.data.name).reverse().join("/")}\n${format(d.value)}`);
-  
-    svg.append("g")
-        .attr("pointer-events", "none")
-        .attr("text-anchor", "middle")
-      .selectAll("text")
-      .data(root.descendants().filter(d => d.depth && (d.y0 + d.y1) / 2 * (d.x1 - d.x0) > 10))
-      .enter().append("text")
-        .attr("transform", function(d) {
-          const x = (d.x0 + d.x1) / 2 * 180 / Math.PI;
-          const y = (d.y0 + d.y1) / 2;
-          return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
+    groupedEmotions.map(re => this.addSizeWhenNoChildren(re));
+
+    groupedEmotions = groupedEmotions.sort((a,b) => {
+      return ('' + a.title).localeCompare(b.title)
+    })
+
+    groupedEmotions.forEach(em => {
+      if(!em.children) {
+        return
+      }
+      
+      em.children.forEach(em1 => {
+        if(!em1.children) {
+          return
+        }
+        
+        em1.children = em1.children.sort((a,b) => {
+          return ('' + a.title).localeCompare(b.title)
         })
-        .attr("dy", "0.35em")
-        .text(d => d.data.name);
-  
-    await svg.node();
-  
-    svg.attr("viewBox", this.autoBox);
-  }
+      })
 
-  autoBox() {
-    const {x, y, width, height} = this.getBBox();
-    return [x, y, width, height];
+      em.children = em.children.sort((a,b) => {
+        return ('' + a.title).localeCompare(b.title)
+      })
+    })
+
+    return { name: "root", children:groupedEmotions};
   }
 
   render() {
     return (
-      <div className="App" id="sunburst">
-      </div>
+      <SunburstChart data={this.state.data}></SunburstChart>
     );
   }
 }

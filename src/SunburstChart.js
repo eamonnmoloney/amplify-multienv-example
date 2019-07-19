@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useRef } from "react";
+import React, { Component, useEffect, useRef, useState } from "react";
 import Amplify, { API, graphqlOperation } from "aws-amplify";
 import { withAuthenticator, Connect } from "aws-amplify-react";
 import 'rc-slider/assets/index.css';
@@ -24,8 +24,7 @@ const SunburstChart = props => {
   const ref = useRef(null);
   
   useEffect(()=>{
-    if(!props.data) return
-    console.log(ref.current)
+    if(!props.data) return      
     sunburst(props.data);
   })
 
@@ -59,7 +58,7 @@ const SunburstChart = props => {
       .enter().append("path")
         .attr("fill", d => { 
           if(d.data.intensity === 0) {
-            return d3.color("black");
+            return d3.rgb(220, 220, 220);
           }
           while (d.depth > 1) 
             d = d.parent; 
@@ -93,11 +92,8 @@ const SunburstChart = props => {
     return [x, y, width, height];
   }
 
-  console.log(ref)
-  console.log("I render")
-  if(props.data){
-    return <svg viewBox="-486.5,-486.4996032714844,973,972.9996337890625" style={{maxWidth: '100%', height: 'auto', font: '1rem sans-serif', margin: '5px', cursor: 'pointer' }} ref={ ref } /> 
-    //return <div ref={ref}></div>
+  if(props.data){    
+    return <svg viewBox="-486.5,-486.4996032714844,973,972.9996337890625" style={{maxWidth: '100%', height: 'auto', font: '1rem sans-serif', margin: '5px', cursor: 'pointer' }} ref={ ref } />     
   }else { 
     return <div id="#sunburst">Loading...</div> 
   }

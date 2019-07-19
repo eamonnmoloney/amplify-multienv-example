@@ -23,7 +23,8 @@ class SunburstCard extends Component {
     super(props);
     this.state = {
       data: null
-    };    
+    };
+    this.clicked = this.clicked.bind(this);
   }
 
   componentDidMount(){
@@ -44,7 +45,7 @@ class SunburstCard extends Component {
   async buildData(){
     const ems1 = (await API.graphql(graphqlOperation(queries.emotionsForCard, {cardId: this.props.match.params.id, limit: 150}))).data.emotionsForCard.items;
     const ems = [].concat(ems1);
-    const groupedEmotions = ems.map(em => {
+    let groupedEmotions = ems.map(em => {
       em.name = em.title;
       if(!em.parent) {
         return em;
@@ -59,19 +60,45 @@ class SunburstCard extends Component {
       
     groupedEmotions.map(re => this.addSizeWhenNoChildren(re));
 
+    groupedEmotions = groupedEmotions.sort((a,b) => {
+      return ('' + a.title).localeCompare(b.title)
+    })
+
+    groupedEmotions.forEach(em => {
+      if(!em.children) {
+        return
+      }
+      
+      em.children.forEach(em1 => {
+        if(!em1.children) {
+          return
+        }
+        
+        em1.children = em1.children.sort((a,b) => {
+          return ('' + a.title).localeCompare(b.title)
+        })
+      })
+
+      em.children = em.children.sort((a,b) => {
+        return ('' + a.title).localeCompare(b.title)
+      })
+    })
+
     return { name: "root", children:groupedEmotions};
+  }
+
+  clicked(node) {    
+    API.graphql(graphqlOperation(mutations.updatePost, {input: {title:node.data.name, intensity:100, id: node.data.id}})).then(()=>{
+      this.buildData().then(data => {
+        this.setState({ data })      
+      });
+    })
   }
 
   render() {
     return (
       <div>
-        <SunburstChart data={this.state.data} clicked={(node) => {
-          API.graphql(graphqlOperation(mutations.updatePost, {input: {title:node.data.name, intensity:100, id: node.data.id}})).then(()=>{
-            this.buildData().then(data => {
-              this.setState({ data })      
-            });
-          })
-        }}></SunburstChart>
+        <SunburstChart data={this.state.data} clicked={this.clicked}></SunburstChart>
       </div>
     );
   }
